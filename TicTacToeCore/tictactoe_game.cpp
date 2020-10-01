@@ -6,9 +6,87 @@
 
 #include "tictactoe_game.hpp"
 #include <cassert>
+#include <cstdlib>
+#include <ctime>
 #include <stdexcept>
 
 namespace tictactoe {
+
+namespace {
+
+///
+/// \brief RandomNumber
+/// \param max
+/// \return
+///
+int RandomNumber(int max)
+{
+    std::srand(std::time(nullptr));
+    return std::rand() % max;
+}
+
+} // namespace
+
+///
+/// \brief The NormalGamePolicy class
+///
+class NormalGamePolicy : public GamePolicy {
+public:
+    void UpdateAttackLinePoints(uint8_t enemy_count, uint8_t friendly_count, Cell& cell) override
+    {
+        // Weaker attack
+        if (friendly_count == danger_zone) {
+            ++cell.attack_points;
+        }
+        // Some attack opportunities were lost because the enemy defended
+        else if (enemy_count < danger_zone) {
+            if (cell.attack_points > 0) {
+                --cell.attack_points;
+            }
+        }
+    }
+
+    void UpdateDefenseLinePoints(uint8_t enemy_count, Cell& cell) override
+    {
+        // Weaker defense
+        if (enemy_count > 0) {
+            cell.defense_points = 1;
+        }
+    }
+};
+
+///
+/// \brief The ImpossibleGamePolicy class
+///
+class ImpossibleGamePolicy : public GamePolicy {
+public:
+    void UpdateAttackLinePoints(uint8_t enemy_count, uint8_t friendly_count, Cell& cell) override
+    {
+        // We have an opportunity to close the game, make sure it's taken
+        if (friendly_count == danger_zone) {
+            cell.attack_points = 20;
+        }
+        // Some attack opportunities were lost because the enemy defended
+        else if (enemy_count < danger_zone) {
+            if (cell.attack_points > 0) {
+                --cell.attack_points;
+            }
+        }
+    }
+
+    void UpdateDefenseLinePoints(uint8_t enemy_count, Cell& cell) override
+    {
+        // The higher the enemy count, the higher the defense
+        if (enemy_count > 0) {
+            cell.defense_points = enemy_count;
+            if (enemy_count == danger_zone) {
+                cell.defense_points = 10;
+            }
+        }
+    }
+};
+
+//////////////////////////////
 
 TicTacToeGame::TicTacToeGame()
     : m_human_side{PlayerSide::os}
@@ -66,9 +144,11 @@ void TicTacToeGame::ComputerMove(bool first)
 {
     assert(m_current_player == PlayerType::computer);
 
-    // First computer move, just start at 0,0
+    // First computer move
     if (first) {
-        auto& cell = m_board.At(0, 0);
+        auto x = RandomNumber(board_size);
+        auto y = RandomNumber(board_size);
+        auto& cell = m_board.At(x, y);
         UpdateCell(cell, m_current_player);
         UpdateGame(cell);
         return;

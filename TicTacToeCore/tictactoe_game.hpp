@@ -15,7 +15,7 @@
 namespace tictactoe {
 
 ///
-/// \brief The GamePolicy class
+/// \brief Defines the attack and defense policies for different difficulty levels
 ///
 class GamePolicy {
 protected:
@@ -25,79 +25,20 @@ public:
     virtual ~GamePolicy() = default;
 
     ///
-    /// \brief UpdateAttackPoints
-    /// \param human_count
-    /// \param computer_count
+    /// \brief UpdateAttackPoints Update the attack points for a cell
+    /// \param enemy_count Number of enemy positions on the same line
+    /// \param friendly_count Number of friendly positions on the same line
     /// \param cell
     ///
     virtual void UpdateAttackLinePoints(uint8_t enemy_count, uint8_t friendly_count,
                                         Cell& cell) = 0;
 
     ///
-    /// \brief UpdateDefensePoints
-    /// \param human_count
+    /// \brief UpdateDefensePoints Update the defense points for a cell
+    /// \param enemy_count Number of enemy positions on the same line
     /// \param cell
     ///
-    virtual void UpdateDefenseLinePoints(uint8_t human_count, Cell& cell) = 0;
-};
-
-///
-/// \brief The NormalGamePolicy class
-///
-class NormalGamePolicy : public GamePolicy {
-public:
-    void UpdateAttackLinePoints(uint8_t enemy_count, uint8_t friendly_count, Cell& cell) override
-    {
-        // Weaker attack
-        if (friendly_count == danger_zone) {
-            ++cell.attack_points;
-        }
-        // Some attack opportunities were lost because the enemy defended
-        else if (enemy_count < danger_zone) {
-            if (cell.attack_points > 0) {
-                --cell.attack_points;
-            }
-        }
-    }
-
-    void UpdateDefenseLinePoints(uint8_t enemy_count, Cell& cell) override
-    {
-        // Weaker defense
-        if (enemy_count > 0) {
-            cell.defense_points = 1;
-        }
-    }
-};
-
-///
-/// \brief The ImpossibleGamePolicy class
-///
-class ImpossibleGamePolicy : public GamePolicy {
-public:
-    void UpdateAttackLinePoints(uint8_t enemy_count, uint8_t friendly_count, Cell& cell) override
-    {
-        // We have an opportunity to close the game, make sure it's taken
-        if (friendly_count == danger_zone) {
-            cell.attack_points = 20;
-        }
-        // Some attack opportunities were lost because the enemy defended
-        else if (enemy_count < danger_zone) {
-            if (cell.attack_points > 0) {
-                --cell.attack_points;
-            }
-        }
-    }
-
-    void UpdateDefenseLinePoints(uint8_t enemy_count, Cell& cell) override
-    {
-        // The higher the enemy count, the higher the defense
-        if (enemy_count > 0) {
-            cell.defense_points = enemy_count;
-            if (enemy_count == danger_zone) {
-                cell.defense_points = 10;
-            }
-        }
-    }
+    virtual void UpdateDefenseLinePoints(uint8_t enemy_count, Cell& cell) = 0;
 };
 
 ///
@@ -121,6 +62,9 @@ enum class PlayerSide { xs, os };
 ///
 enum class PlayerType { computer, human };
 
+///
+/// \brief Callback used to notify the game status update to the UI
+///
 using GameUpdateCalback = std::function<void(GameStatus)>;
 
 ///
@@ -145,24 +89,24 @@ public:
     ~TicTacToeGame() = default;
 
     ///
-    /// \brief Start
-    /// \param human_side
-    /// \param first_player
-    /// \param callback
-    /// \param easy_mode
+    /// \brief Start Starts a new game
+    /// \param human_side X or O for the human?
+    /// \param first_player Who goes first
+    /// \param callback Game status update notification
+    /// \param easy_mode Easy or difficult level
     ///
     void Start(PlayerSide human_side, PlayerType first_player, const GameUpdateCalback& callback,
                bool easy_mode);
 
     ///
-    /// \brief HumanMove
+    /// \brief HumanMove Add position for human player
     /// \param x
     /// \param y
     ///
     void HumanMove(uint8_t x, uint8_t y);
 
     ///
-    /// \brief GetCell
+    /// \brief GetCell Getter for the board cells
     /// \param x
     /// \param y
     /// \return
@@ -171,39 +115,39 @@ public:
 
 private:
     ///
-    /// \brief ComputerMove
-    /// \param first
+    /// \brief ComputerMove Perform computer move
+    /// \param first First move of the game for the computer
     ///
     void ComputerMove(bool first);
 
     ///
-    /// \brief UpdateAttackPoints
+    /// \brief UpdateAttackPoints Update attack scores starting from x, y
     /// \param x
     /// \param y
     ///
     void UpdateAttackPoints(uint8_t x, uint8_t y);
 
     ///
-    /// \brief UpdateDefensePoints
+    /// \brief UpdateDefensePoints Update defense scores starting from x, y
     /// \param x
     /// \param y
     ///
     void UpdateDefensePoints(uint8_t x, uint8_t y);
 
     ///
-    /// \brief UpdateCell
+    /// \brief UpdateCell Update cell data after a player move
     /// \param cell
     ///
     void UpdateCell(Cell& cell, PlayerType player);
 
     ///
-    /// \brief UpdateGame
+    /// \brief UpdateGame Update game data and status and notify
     /// \param cell
     ///
     void UpdateGame(Cell& cell);
 
     ///
-    /// \brief IsWinningMove
+    /// \brief IsWinningMove Check if last move is a game winner
     /// \param cell
     /// \return
     ///
