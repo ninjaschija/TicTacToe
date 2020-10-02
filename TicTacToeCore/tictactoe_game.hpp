@@ -85,8 +85,30 @@ public:
     ///
     TicTacToeGame();
 
+    ///
+    /// \brief TicTacToeGame deleted copy constructor
+    ///
+    TicTacToeGame(TicTacToeGame const&) = delete;
+
+    ///
+    /// \brief TicTacToeGame deleted move constructor
+    ///
+    TicTacToeGame(TicTacToeGame&&) = delete;
+
     /// Default destructor
     ~TicTacToeGame() = default;
+
+    ///
+    /// \brief operator = deleted
+    /// \return
+    ///
+    TicTacToeGame& operator=(TicTacToeGame const&) = delete;
+
+    ///
+    /// \brief operator = deleted
+    /// \return
+    ///
+    TicTacToeGame& operator=(TicTacToeGame&&) = delete;
 
     ///
     /// \brief Start Starts a new game

@@ -82,11 +82,11 @@ void TicTacToeBoard::ForEachD2(TicTacToeBoard::ForEachCallable&& pred, bool incl
     }
 }
 
-uint16_t TicTacToeBoard::CountX(uint8_t x, CellValue val)
+uint16_t TicTacToeBoard::CountX(uint8_t x, CellValue val) const
 {
     uint16_t sum = 0;
     for (uint8_t i = 0; i < board_size; ++i) {
-        Cell& cell = At(x, i);
+        const Cell& cell = At(x, i);
         if (cell.value == val) {
             ++sum;
         }
@@ -94,11 +94,11 @@ uint16_t TicTacToeBoard::CountX(uint8_t x, CellValue val)
     return sum;
 }
 
-uint16_t TicTacToeBoard::CountY(uint8_t y, CellValue val)
+uint16_t TicTacToeBoard::CountY(uint8_t y, CellValue val) const
 {
     uint16_t sum = 0;
     for (uint8_t i = 0; i < board_size; ++i) {
-        Cell& cell = At(i, y);
+        const Cell& cell = At(i, y);
         if (cell.value == val) {
             ++sum;
         }
@@ -106,11 +106,11 @@ uint16_t TicTacToeBoard::CountY(uint8_t y, CellValue val)
     return sum;
 }
 
-uint16_t TicTacToeBoard::CountD1(CellValue val)
+uint16_t TicTacToeBoard::CountD1(CellValue val) const
 {
     uint16_t sum = 0;
     for (uint8_t i = 0; i < board_size; ++i) {
-        Cell& cell = At(i, i);
+        const Cell& cell = At(i, i);
         if (cell.value == val) {
             ++sum;
         }
@@ -118,11 +118,11 @@ uint16_t TicTacToeBoard::CountD1(CellValue val)
     return sum;
 }
 
-uint16_t TicTacToeBoard::CountD2(CellValue val)
+uint16_t TicTacToeBoard::CountD2(CellValue val) const
 {
     uint16_t sum = 0;
     for (uint8_t i = 0; i < board_size; ++i) {
-        Cell& cell = At(i, board_size - i - 1);
+        const Cell& cell = At(i, board_size - i - 1);
         if (cell.value == val) {
             ++sum;
         }

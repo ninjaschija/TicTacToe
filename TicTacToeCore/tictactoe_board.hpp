@@ -45,8 +45,30 @@ public:
     ///
     TicTacToeBoard();
 
+    ///
+    /// \brief TicTacToeBoard deleted copy constructor
+    ///
+    TicTacToeBoard(TicTacToeBoard const&) = default;
+
+    ///
+    /// \brief TicTacToeBoard deleted move constructor
+    ///
+    TicTacToeBoard(TicTacToeBoard&&) = default;
+
     /// Default destructor
     ~TicTacToeBoard() = default;
+
+    ///
+    /// \brief operator = deleted
+    /// \return
+    ///
+    TicTacToeBoard& operator=(TicTacToeBoard const&) = default;
+
+    ///
+    /// \brief operator = deleted
+    /// \return
+    ///
+    TicTacToeBoard& operator=(TicTacToeBoard&&) = default;
 
     ///
     /// \brief At Non-const getter for board position
@@ -65,7 +87,7 @@ public:
     const Cell& At(uint8_t x, uint8_t y) const;
 
     ///
-    /// \brief MaxScoreCell Get the position with the highest score (attach + defense points)
+    /// \brief MaxScoreCell Get the position with the highest score (attack + defense points)
     /// \return
     ///
     Cell& MaxScoreCell();
@@ -106,7 +128,7 @@ public:
     /// \param val
     /// \return
     ///
-    uint16_t CountX(uint8_t x, CellValue val);
+    uint16_t CountX(uint8_t x, CellValue val) const;
 
     ///
     /// \brief CountY Count positions (X or O) for a given column
@@ -114,21 +136,21 @@ public:
     /// \param val
     /// \return
     ///
-    uint16_t CountY(uint8_t y, CellValue val);
+    uint16_t CountY(uint8_t y, CellValue val) const;
 
     ///
     /// \brief CountD1 Count positions (X or O) for the first diagonal
     /// \param val
     /// \return
     ///
-    uint16_t CountD1(CellValue val);
+    uint16_t CountD1(CellValue val) const;
 
     ///
     /// \brief CountD2 Count positions (X or O) for the second diagonal
     /// \param val
     /// \return
     ///
-    uint16_t CountD2(CellValue val);
+    uint16_t CountD2(CellValue val) const;
 
 private:
     ///
