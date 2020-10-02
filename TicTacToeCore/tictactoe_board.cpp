@@ -42,7 +42,7 @@ Cell& TicTacToeBoard::MaxScoreCell()
     });
 }
 
-void TicTacToeBoard::ForEachX(uint8_t x, TicTacToeBoard::ForEachCallable&& pred, bool include_empty)
+void TicTacToeBoard::ForEachX(uint8_t x, const ForEachCallable& pred, bool include_empty)
 {
     for (uint8_t i = 0; i < board_size; ++i) {
         auto& cell = At(x, i);
@@ -52,7 +52,7 @@ void TicTacToeBoard::ForEachX(uint8_t x, TicTacToeBoard::ForEachCallable&& pred,
     }
 }
 
-void TicTacToeBoard::ForEachY(uint8_t y, TicTacToeBoard::ForEachCallable&& pred, bool include_empty)
+void TicTacToeBoard::ForEachY(uint8_t y, const ForEachCallable& pred, bool include_empty)
 {
     for (uint8_t i = 0; i < board_size; ++i) {
         auto& cell = At(i, y);
@@ -62,7 +62,7 @@ void TicTacToeBoard::ForEachY(uint8_t y, TicTacToeBoard::ForEachCallable&& pred,
     }
 }
 
-void TicTacToeBoard::ForEachD1(TicTacToeBoard::ForEachCallable&& pred, bool include_empty)
+void TicTacToeBoard::ForEachD1(const ForEachCallable& pred, bool include_empty)
 {
     for (uint8_t i = 0; i < board_size; ++i) {
         auto& cell = At(i, i);
@@ -72,7 +72,7 @@ void TicTacToeBoard::ForEachD1(TicTacToeBoard::ForEachCallable&& pred, bool incl
     }
 }
 
-void TicTacToeBoard::ForEachD2(TicTacToeBoard::ForEachCallable&& pred, bool include_empty)
+void TicTacToeBoard::ForEachD2(const ForEachCallable& pred, bool include_empty)
 {
     for (uint8_t i = 0; i < board_size; ++i) {
         auto& cell = At(i, board_size - i - 1);

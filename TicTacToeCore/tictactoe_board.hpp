@@ -98,7 +98,7 @@ public:
     /// \param pred
     /// \param include_empty
     ///
-    void ForEachX(uint8_t x, ForEachCallable&& pred, bool include_empty = false);
+    void ForEachX(uint8_t x, const ForEachCallable& pred, bool include_empty = false);
 
     ///
     /// \brief ForEachY Convenience cell iterator for a given row
@@ -106,21 +106,21 @@ public:
     /// \param pred
     /// \param include_empty
     ///
-    void ForEachY(uint8_t y, ForEachCallable&& pred, bool include_empty = false);
+    void ForEachY(uint8_t y, const ForEachCallable& pred, bool include_empty = false);
 
     ///
     /// \brief ForEachD1 Convenience cell iterator for the first diagonal
     /// \param pred
     /// \param include_empty
     ///
-    void ForEachD1(ForEachCallable&& pred, bool include_empty = false);
+    void ForEachD1(const ForEachCallable& pred, bool include_empty = false);
 
     ///
     /// \brief ForEachD2 Convenience cell iterator for the second diagonal
     /// \param pred
     /// \param include_empty
     ///
-    void ForEachD2(ForEachCallable&& pred, bool include_empty = false);
+    void ForEachD2(const ForEachCallable& pred, bool include_empty = false);
 
     ///
     /// \brief CountX Count positions (X or O) for a given row
